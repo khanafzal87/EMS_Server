@@ -1,6 +1,8 @@
 var app = require('express')();
 var http = require('http').Server(app);
 var mysql = require('mysql');
+var path = require('path');
+var multer  = require('multer');
 var bodyParser = require("body-parser");
 var connection = mysql.createConnection({
     host: 'localhost',
@@ -8,6 +10,14 @@ var connection = mysql.createConnection({
     password: '',
     database: 'ohrm',
 });
+/*var storage = multer.diskStorage({
+  destination: './uploads/',
+  filename: function (req, file, cb) {
+    cb(null, file.originalname.replace(path.extname(file.originalname), &quot;&quot;) + '-' + Date.now() + path.extname(file.originalname))
+  }
+})*/
+ 
+//var upload = multer({ storage: storage })
 
 app.use(function(req, res, next) {
 
@@ -222,6 +232,42 @@ app.delete('/expenseType/:id', function(req, res) {
 //Add ,EDit ,Delete and Select Expense Type -End
 //Admin CURD API CALL-- End
 
+//Employee CRUD API CAll--Start
+//Add,Edit,Delete and Select Expense -Start
+app.get('/expense',function (req,res) {
+	// body...
+	data={
+		"Data":''
+	};
+	connection.query('select * from tbl_employee_expenses',function (err,rows,fields) {
+		// body...
+		if(rows.length!=0)
+		{
+			res.json(rows);
+		}
+		else
+		{
+			data["Data"] = 'No data Found..';
+            res.json(data);
+		}
+	});
+});
+app.get('/expense/:id',function (req,res) {
+	// body...
+});
+app.post('/expense',function (req,res) {
+	// body...
+});
+app.put('/expense/:id',function (req,res) {
+	// body...
+});
+app.delete('/expense/:id',function (req,res) {
+	// body...
+});
+
+//Add,Edit,Delete and Select Expense -End
+
+//Employee CRUD API Call--END
 
 
 app.post('/login', function(req, res) {
